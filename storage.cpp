@@ -3,6 +3,9 @@
 ConfigMap config;
 
 bool loadConfig() {
+  /*
+  Load config from EEPROM
+  */
   memset(&config, 0, sizeof(ConfigMap));
   strncpy(config.szColor, "125,125,0", 32);
 
@@ -17,7 +20,7 @@ bool loadConfig() {
     data[i] = EEPROM.read( addr );
   }
 
-  Serial.print("Magic:");
+  Serial.print("[Config] Magic:");
   Serial.println(tmp[0]);
 
   if(tmp[0] != CONFIG_VERSION)
@@ -34,9 +37,9 @@ bool loadConfig() {
   Serial.println(config.port);
   Serial.print("[Config] ssl:");
   if(config.bSsl)
-    Serial.println("True");
+    Serial.println(" True");
   else
-    Serial.println("False");
+    Serial.println(" False");
   Serial.print("[Config] fingerprint:");
   Serial.println(config.szFingerprint);
   Serial.print("[Config] username:");
@@ -45,9 +48,19 @@ bool loadConfig() {
   Serial.println(config.szPassword);
   Serial.print("[Config] topic:");
   Serial.println(config.szTopic);
+
+  
+  Serial.print("[Config] reset:");
+  if(config.bReset)
+    Serial.println(" True");
+  else
+    Serial.println(" False");
 }
 
 void saveConfig() {
+  /*
+  Write config to EEPROM
+  */
   config.version = CONFIG_VERSION;
   
   uint16_t addr = 0;
@@ -60,7 +73,10 @@ void saveConfig() {
 }
 
 void reset_config() {
-  config.version = RESET_CONFIG;
+  /*
+  Trigger setup mode
+  */
+  config.bReset = true;
   
   uint16_t addr = 0;
   uint8_t *pData = (uint8_t *)&config;

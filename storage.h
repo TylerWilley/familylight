@@ -4,7 +4,7 @@
 #include <EEPROM.h>
 
 #define RESET_CONFIG 0
-#define CONFIG_VERSION 127
+#define CONFIG_VERSION 128
 
 struct ConfigMap
 {
@@ -17,6 +17,7 @@ struct ConfigMap
   char     szPassword[32];
   char     szTopic[32];
   char     szColor[32];
+  bool     bReset;
 };
 
 bool loadConfig();
