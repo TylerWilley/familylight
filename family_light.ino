@@ -7,20 +7,33 @@
 #include "state.h"
 
 extern enum State state;
+extern ConfigMap config;
 
 void setup() {
-    state = NORMAL;
-    setup_neo();
-    Serial.begin(115200);
-    if(!loadConfig())
-      reset_wifi();
-    setup_wifi();
-    setup_mqtt();
-    setup_button();
+  /*
+  Initialize everything, if we need to setup
+  run wifi setup to connect to wifi and get
+  mqtt configuration
+  */
+  state = NORMAL;
+  setup_neo();
+  Serial.begin(115200);
+  if(!loadConfig() || config.bReset)
+  {
+    config.bReset = false;
+    reset_wifi();
+  }
+  setup_wifi();
+  setup_mqtt();
+  setup_button();
 }
 
 void loop() {
-    loop_mqtt();
-    loop_neo();
-    loop_button();
+  /*
+  Main loop, handle mqtt, then neo pixel animations, then button handling
+  loop functions should not block (e.g. use delay) for smooth animations.
+  */
+  loop_mqtt();
+  loop_neo();
+  loop_button();
 }

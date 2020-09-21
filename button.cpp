@@ -16,12 +16,21 @@ uint32_t last_button_press = 0;
 
 void setup_button()
 {
+  /*
+  Bind the button pin and load it's initial state
+  */
   pinMode(INPUT_PIN, INPUT_PULLUP);
   last_button_state = digitalRead(INPUT_PIN);
 }
 
 void loop_button()
 {
+  /*
+  Check button state, debounce only allowing changes every 100ms
+  This sketch is designed to use a latching button because that's
+  what my Energizer tap lights came with. You'll need to modify
+  it if your buttons are momentary.
+  */
   int button_state = digitalRead(INPUT_PIN);
   if(button_state != last_button_state && millis() - last_button_press > 100) {
     Serial.print("[BUTTON] ");
@@ -43,20 +52,21 @@ void loop_button()
       case 0:
         break;
       case 1:
-          Serial.println("[BUTTON]Singlepress");
+          Serial.println("[BUTTON] Singlepress");
           if(state == NORMAL)
             send_color(config.szColor);
           if(state == COLOR_SELECT)
             select_current_color();
           break;
       case 2:
-          Serial.println("[BUTTON]Doublepress");
+          Serial.println("[BUTTON] Doublepress");
           start_color_select();
           break;
       case 3:
+      case 4:
           break;
       default:
-          Serial.println("[BUTTON]4 or more presses presses");
+          Serial.println("[BUTTON] 5 or more presses presses");
           reset_config();
         
     }
