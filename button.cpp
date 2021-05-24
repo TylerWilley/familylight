@@ -15,7 +15,7 @@ int press_count = 0;
 uint32_t last_button_press = 0;
 bool momentary_depressed = false;
 
-const bool momentary_button = true; 
+const bool momentary_button = false; 
 
 
 void setup_button()
@@ -33,7 +33,7 @@ void loop_button()
   Check button state, debounce only allowing changes every 100ms
   This sketch is designed to use a latching button because that's
   what my Energizer tap lights came with. You'll need to modify
-  button_type to 1 if your buttons are momentary.
+  momentary_button to 'true' if your buttons are momentary.
   */
   int button_state = digitalRead(INPUT_PIN);
 
